@@ -83,3 +83,40 @@ testFirstPosition :: Eq a => a -> [a] -> Bool
 testFirstPosition x ys =  case firstPosition x ys of
                            Nothing -> and [ ys !! i /= x | i <- [0 .. length ys - 1]]
                            Just n  -> ys !! n == x
+
+-- Either type constructor
+
+data Either a b = Left a | Right b
+
+-- And type constructor
+
+data And a b = Both a b
+
+data MainDish = Chicken | Vegetarian | Pasta
+data Dessert = IceCream | Cake | Fruit
+data Drink = Tea | Coffee | Beer
+
+type SaverMenu = Either (And MainDish Dessert) (And MainDish Drink)
+
+type SaverMenu' = And MainDish (Either Dessert Drink)
+
+prime :: SaverMenu -> SaverMenu'
+prime (Left (Both m d)) = Both m (Left  d)
+prime (Right(Both m d)) = Both m (Right d)
+
+unprime :: SaverMenu' -> SaverMenu
+unprime (Both m (Left  d)) = Left (Both m d)
+unprime (Both m (Right d)) = Right(Both m d)
+
+data List a = Nil | Cons a (List a)
+
+Nil :: List a 
+Cons :: a -> List a -> List a 
+
+nativelist2ourlist :: [a] -> List a
+nativelist2ourlist [] = Nil
+nativelist2ourlist (x:xs) = Cons x (nativelist2ourlist xs)
+
+ourlist2nativelist :: List a -> [a]
+ourlist2nativelist Nil = []
+ourlist2nativelist (Cons x xs) = x:ourlist2nativelist xs
