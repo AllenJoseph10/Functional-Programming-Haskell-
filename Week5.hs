@@ -120,3 +120,11 @@ nativelist2ourlist (x:xs) = Cons x (nativelist2ourlist xs)
 ourlist2nativelist :: List a -> [a]
 ourlist2nativelist Nil = []
 ourlist2nativelist (Cons x xs) = x:ourlist2nativelist xs
+
+append' :: List a -> List a -> List a
+append' Nil ys = ys
+append' (Cons x xs) ys = Cons x (append' xs ys)
+
+rev :: List a -> List a -> List a
+rev Nil = Nil
+rev (Cons x xs) = rev xs `append` (Cons x Nil)
