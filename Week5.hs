@@ -128,3 +128,29 @@ append (Cons x xs) ys = Cons x (append xs ys)
 rev :: List a -> List a 
 rev Nil = Nil
 rev (Cons x xs) = rev xs `append` (Cons x Nil)
+
+ourlist2nativelist (append (nativelist2ourlist xs) (nativelist2ourlist ys)) == xs ++ ys
+ourlist2nativelist (rev (nativelist2ourlist xs)) == reverse xs
+
+fastrev :: List a -> List a
+fastrev xs = revapp xs Nil
+  where
+    revapp :: List a -> List a -> List a
+    revapp (Cons x xs) ys = revapp xs (Cons x ys)
+    revapp Nil         ys = ys
+
+  fastrev (Cons 1 (Cons 2 (Cons 3 (Cons 4 Nil))))
+= revapp (Cons 1 (Cons 2 (Cons 3 (Cons 4 Nil)))) Nil
+= revapp (Cons 2 (Cons 3 (Cons 4 Nil))) (Cons 1 Nil)
+= revapp (Cons 3 (Cons 4 Nil)) (Cons 2 (Cons 1 Nil))
+= revapp (Cons 4 Nil) (Cons 3 (Cons 2 (Cons 1 Nil)))
+= revapp Nil (Cons 4 (Cons 3 (Cons 2 (Cons 1 Nil))))
+= Cons 4 (Cons 3 (Cons 2 (Cons 1 Nil)))
+
+-- Fibonacci Numbers (An aside on accumulators)
+
+fastfib n = fibAcc n 0 1
+  where
+    fibAcc 0 x y = x
+    fibAcc 1 x y = y
+    fibAcc n x y = fibAcc (n-1) y (x+y)
