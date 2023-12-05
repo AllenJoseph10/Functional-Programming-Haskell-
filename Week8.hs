@@ -1,3 +1,7 @@
+{-# OPTIONS_GHC -fwarn-incomplete-patterns #-}
+import Data1
+import System.Random
+
 isBST :: Ord a => BT a -> Bool
 isBST Empty        = True
 isBST (Fork x l r) = allSmaller x l
@@ -126,13 +130,3 @@ msort :: Ord a => [a] -> [a]
 msort xs | length xs <= 1  =  xs
          | otherwise       = merge (msort es) (msort os)
                              where (es, os) = eosplit xs
-
-
-fibm :: Monad m => Integer -> m Integer
-fibm 0 = pure 0
-fibm 1 = pure 1
-fibm n = do
-         x <- fibm (n-2)
-         y <- fibm (n-1)
-         pure (x+y)
-         
